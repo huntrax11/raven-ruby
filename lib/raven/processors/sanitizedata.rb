@@ -61,6 +61,14 @@ module Raven
       def clean_invalid_utf8_bytes(text)
         if RUBY_VERSION <= '1.8.7'
           text
+        elsif RUBY_VERSION < '2.1.0'
+          text.encode(
+            'UTF-8',
+            'binary',
+            :invalid => :replace,
+            :undef => :replace,
+            :replace => ''
+          )
         else
           text.encode(
             'UTF-8',
